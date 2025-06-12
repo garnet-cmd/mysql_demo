@@ -11,7 +11,7 @@ import (
 // 查询多行数据
 func queryMultipleRows(db *sql.DB) {
 	// 执行查询
-	rows, err := db.Query("SELECT id, username, email FROM users WHERE active = ?", true)
+	rows, err := db.Query("SELECT student_id, name, gender, address FROM student_info", true)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -20,14 +20,15 @@ func queryMultipleRows(db *sql.DB) {
 	fmt.Println("用户列表:")
 	for rows.Next() {
 		var (
-			id       int
-			username string
-			email    string
+			student_id int
+			name       string
+			gender     string
+			address    string
 		)
-		if err := rows.Scan(&id, &username, &email); err != nil {
+		if err := rows.Scan(&student_id, &name, &gender, &address); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("ID: %d, 用户名: %s, 邮箱: %s\n", id, username, email)
+		fmt.Printf("ID: %d, 姓名: %s, 性别: %s, 地址: %s", student_id, name, gender, address)
 	}
 
 	// 检查遍历过程中是否有错误
@@ -39,25 +40,25 @@ func queryMultipleRows(db *sql.DB) {
 // 插入数据
 func insertData(db *sql.DB) {
 	// 准备插入语句
-	stmt, err := db.Prepare("INSERT INTO users(username, email) VALUES(?, ?)")
+	stmt, err := db.Prepare("INSERT INTO student_info(student_id, name, gender, address) VALUES(?, ?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
 
 	// 执行插入
-	res, err := stmt.Exec("newuser", "newuser@example.com")
+	res, err := stmt.Exec("ST009", "Phoebe Buffet", "Female", "284 Central Park, New York, USA")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// 获取插入的ID
-	id, err := res.LastInsertId()
+	student_id, err := res.LastInsertId()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("插入成功，ID为: %d\n", id)
+	fmt.Printf("插入成功,ID为: %d\n", student_id)
 }
 
 // 更新数据
@@ -96,11 +97,11 @@ func deleteData(db *sql.DB) {
 }
 
 func main() {
-	dbUser := "rongan"
-	dbPass := "rongandb"
-	dbHost := "183.221.243.20"
+	dbUser := "root"
+	dbPass := "root"
+	dbHost := "192.168.11.110"
 	dbPort := "3306"
-	dbName := "mysql"
+	dbName := "test"
 
 	// 创建DSN(Data Source Name)
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True",
@@ -121,4 +122,6 @@ func main() {
 
 	fmt.Println("成功连接到MySQL数据库!")
 
+	// 查询学生信息
+	queryMultipleRows(db)
 }
