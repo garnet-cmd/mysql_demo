@@ -124,4 +124,8 @@ func main() {
 
 	// 查询学生信息
 	queryMultipleRows(db)
+
+	// 插入新生信息
+	insertData(db)
+
 }
