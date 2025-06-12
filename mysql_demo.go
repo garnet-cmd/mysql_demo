@@ -64,8 +64,8 @@ func insertData(db *sql.DB) {
 // 更新数据
 func updateData(db *sql.DB) {
 	// 执行更新
-	res, err := db.Exec("UPDATE users SET email = ? WHERE id = ?",
-		"updated@example.com", 1)
+	res, err := db.Exec("UPDATE student_info SET address = ? WHERE student_id = ?",
+		"123 Main Street, California, USA", "ST001")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -125,7 +125,10 @@ func main() {
 	// 查询学生信息
 	queryMultipleRows(db)
 
-	// 插入新生信息
+	// 插入新生数据
 	insertData(db)
+
+	// 更改学生数据
+	updateData(db)
 
 }
