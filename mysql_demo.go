@@ -82,7 +82,7 @@ func updateData(db *sql.DB) {
 // 删除数据
 func deleteData(db *sql.DB) {
 	// 执行删除
-	res, err := db.Exec("DELETE FROM users WHERE id = ?", 1)
+	res, err := db.Exec("DELETE FROM student_info WHERE student_id = ?", "ST001")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -130,5 +130,8 @@ func main() {
 
 	// 更改学生数据
 	updateData(db)
+
+	// 删除学生数据
+	deleteData(db)
 
 }
